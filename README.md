@@ -1,11 +1,19 @@
 # research-kafka
 Sandpit for kafka samples
 
+Running KAFKA with Docker for Mac (doesn't use docker-machine, hence 0.0.0.0)
 
 ```
-docker run -p 2181:2181 -p 9092:9092 --env ADVERTISED_HOST=`docker-machine ip \`docker-machine active\`` --env ADVERTISED_PORT=9092 spotify/kafka
-export KAFKA=`docker-machine ip \`docker-machine active\``:9092
-export ZOOKEEPER=`docker-machine ip \`docker-machine active\``:2181
-kafka-console-producer.sh --broker-list $KAFKA --topic test
-kafka-console-consumer.sh --zookeeper $ZOOKEEPER --topic test
+docker run -p 2181:2181 -p 9092:9092 --env ADVERTISED_HOST=0.0.0.0 --env ADVERTISED_PORT=9092 spotify/kafka
+```
+
+Use these to test Kafka is running and working (type into producer console to send to consumer console)
+```
+export KAFKA=0.0.0.0:9092
+./kafka-console-producer.sh --broker-list $KAFKA --topic test
+```
+
+```
+export KAFKA=0.0.0.0:9092
+./kafka-console-consumer.sh --bootstrap-server $KAFKA --topic test
 ```

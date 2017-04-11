@@ -24,7 +24,7 @@ public class KafkaTest {
     public void testReceiver() throws Exception {
         sender.sendMessage("helloworld.t", "Hello Spring Kafka!");
 
-        receiver.getLatch().await(10000, TimeUnit.MILLISECONDS);
+        receiver.getLatch().await(30000, TimeUnit.MILLISECONDS);
         assertThat(receiver.getLatch().getCount()).isEqualTo(0);
     }
 }
