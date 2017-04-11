@@ -1,8 +1,7 @@
 package me.roybailey.springboot.kafka;
 
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import me.roybailey.springboot.domain.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -12,31 +11,31 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
 
 
 @Slf4j
-public class KafkaSamplePublisher {
+public class KafkaEventPublisher {
 
     @Autowired
-    @Qualifier("sampleKafkaTemplate")
-    private KafkaTemplate<Integer, String> kafkaTemplate;
+    @Qualifier("eventKafkaTemplate")
+    private KafkaTemplate<Integer, Event> kafkaTemplate;
 
-    public void sendMessage(String topic, String message) {
+    public void sendMessage(String topic, Event event) {
         // the KafkaTemplate provides asynchronous send methods returning a Future
-        ListenableFuture<SendResult<Integer, String>> future = kafkaTemplate.send(topic, message);
+        ListenableFuture<SendResult<Integer, Event>> future = kafkaTemplate.send(topic, event);
 
         // you can register a callback with the listener to receive the result
         // of the send asynchronously
         future.addCallback(
-                new ListenableFutureCallback<SendResult<Integer, String>>() {
+                new ListenableFutureCallback<SendResult<Integer, Event>>() {
 
                     @Override
-                    public void onSuccess(SendResult<Integer, String> result) {
-                        log.info("sent message='{}' with offset={}",
-                                message,
+                    public void onSuccess(SendResult<Integer, Event> result) {
+                        log.info("sent event='{}' with offset={}",
+                                event,
                                 result.getRecordMetadata().offset());
                     }
 
                     @Override
                     public void onFailure(Throwable ex) {
-                        log.error("unable to send message='{}'", message, ex);
+                        log.error("unable to send event='{}'", event, ex);
                     }
                 });
 

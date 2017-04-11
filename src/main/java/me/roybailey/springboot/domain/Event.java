@@ -1,4 +1,4 @@
-package me.roybailey.springboot.domain.event;
+package me.roybailey.springboot.domain;
 
 
 import lombok.AllArgsConstructor;

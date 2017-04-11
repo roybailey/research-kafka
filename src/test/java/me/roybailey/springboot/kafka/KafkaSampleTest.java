@@ -12,7 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class KafkaTest {
+public class KafkaSampleTest {
 
     @Autowired
     private KafkaSamplePublisher sender;
@@ -21,10 +21,11 @@ public class KafkaTest {
     private KafkaSampleConsumer receiver;
 
     @Test
-    public void testReceiver() throws Exception {
-        sender.sendMessage("helloworld.t", "Hello Spring Kafka!");
+    public void testSampleKafkaSendReceive() throws Exception {
+        String expected = "Hello Spring Kafka!";
+        sender.sendMessage("helloworld.t", expected);
 
-        receiver.getLatch().await(30000, TimeUnit.MILLISECONDS);
-        assertThat(receiver.getLatch().getCount()).isEqualTo(0);
+        String message = receiver.getMessage(60);
+        assertThat(message).isEqualTo(expected);
     }
 }

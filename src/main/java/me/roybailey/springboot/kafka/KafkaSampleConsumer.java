@@ -1,25 +1,28 @@
 package me.roybailey.springboot.kafka;
 
-import java.util.concurrent.CountDownLatch;
-
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
+
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 
 @Slf4j
 public class KafkaSampleConsumer {
 
-    private CountDownLatch latch = new CountDownLatch(1);
+    private LinkedBlockingQueue<String> events = new LinkedBlockingQueue<>();
 
     @KafkaListener(topics = "helloworld.t")
     public void receiveMessage(String message) {
         log.info("received message='{}'", message);
-        latch.countDown();
+        events.offer(message);
     }
 
-    public CountDownLatch getLatch() {
-        return latch;
+    public String getMessage(int seconds) throws InterruptedException {
+        log.info("polling for event");
+        String result = events.poll(seconds, TimeUnit.SECONDS);
+        log.info("obtained event='{}'", result);
+        return result;
     }
+
 }
