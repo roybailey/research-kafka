@@ -32,7 +32,7 @@ export KAFKA=0.0.0.0:9092
 ```
 
 
-#### Motivation 
+#### Where to look 
 
 * `KafkaSampleTest` used the `KafkaSamplePublisher/Consumer` setup to publish simple String messages over Kafka topic
 * `KafkaEventTest` used the `KafkaEventPublisher/Consumer` setup to publish `Event<T>` objects over Kafka topic
